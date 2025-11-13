@@ -1,0 +1,17 @@
+# macOS
+.DS_Store
+
+# Node
+BetChecker-FrontEnd/node_modules/
+BetChecker-FrontEnd/dist/
+
+# Python
+BetChecker-BackEnd/.venv/
+__pycache__/
+*.pyc
+
+# Logs
+*.log
+
+# Env files
+.env
