@@ -12,7 +12,36 @@ Use these tests to:
 
 ---
 
-## Test 1: Duplicate Players (Same Name + DOB)
+## Test 1: Duplicate Players (Same API ID) ⭐ UPDATED
+
+### What It Tests
+Detects if the same API player ID was inserted multiple times. This should NEVER happen - each API ID should map to one player record.
+
+### SQL Query
+```sql
+-- Find duplicate API player IDs
+SELECT 
+    api_player_id,
+    COUNT(*) as duplicate_count,
+    GROUP_CONCAT(player_id) as player_ids,
+    GROUP_CONCAT(player_name) as names
+FROM players
+WHERE api_player_id IS NOT NULL
+GROUP BY api_player_id
+HAVING COUNT(*) > 1
+ORDER BY duplicate_count DESC;
+```
+
+### Expected Result
+**Should return 0 rows** - Each API ID should be unique
+
+### If Issues Found
+- Check if unique constraint was applied: `SELECT name FROM sqlite_master WHERE type='index' AND name='idx_players_api_id';`
+- Review scraper logic - should check for existing api_player_id before inserting
+
+---
+
+## Test 1b: Duplicate Players (Same Name + DOB) - Legacy Test
 
 ### What It Tests
 Detects if the same player (same name + DOB) was inserted multiple times. This should NEVER happen if the unique constraint is working.
@@ -38,6 +67,57 @@ ORDER BY duplicate_count DESC;
 ### If Issues Found
 - Check if unique constraint was applied: `SELECT name FROM sqlite_master WHERE type='index' AND name='idx_player_name_dob';`
 - Review scraper logic - should use `get_or_create_player()` not `insert()`
+
+---
+
+## Test 2: Potential Duplicate Players (Same Name, Different API IDs) ⭐ NEW
+
+### What It Tests
+Finds players with the same name but different API player IDs. These need manual review to determine if they're actually the same person or different people with the same name.
+
+### SQL Query
+```sql
+-- Find players with same name but different API IDs
+SELECT 
+    player_name,
+    COUNT(DISTINCT api_player_id) as different_api_ids,
+    COUNT(*) as total_records,
+    GROUP_CONCAT(DISTINCT api_player_id) as api_ids,
+    GROUP_CONCAT(DISTINCT player_id) as our_ids,
+    GROUP_CONCAT(DISTINCT date_of_birth) as birth_dates
+FROM players
+WHERE api_player_id IS NOT NULL
+GROUP BY player_name
+HAVING COUNT(DISTINCT api_player_id) > 1
+ORDER BY different_api_ids DESC, player_name;
+```
+
+### Expected Result
+**Should return 0 rows ideally** - But if found, these are candidates for manual review
+
+### If Issues Found
+- **Review manually** - Check if API IDs refer to same person
+- **If same person**: Merge records (keep one player_id, update all stats to point to it)
+- **If different people**: No action needed (legitimate duplicates)
+
+### Python Test Script
+```bash
+python scripts/test_duplicate_players.py
+```
+
+### Manual Review Process
+1. For each duplicate case, check:
+   - Do the API IDs refer to the same person?
+   - Check teams they played for (same teams = likely same person)
+   - Check game date ranges (overlapping = likely different people)
+2. If same person:
+   ```sql
+   -- Merge: Update all stats to point to one player_id
+   UPDATE player_game_stats SET player_id = <keep_id> WHERE player_id = <duplicate_id>;
+   -- Delete duplicate
+   DELETE FROM players WHERE player_id = <duplicate_id>;
+   ```
+3. If different people: No action needed
 
 ---
 
