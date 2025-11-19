@@ -1,4 +1,4 @@
-# Frontend API Integration Guide
+okay # Frontend API Integration Guide
 
 This guide explains how to use the BetChecker API integration in the frontend application.
 

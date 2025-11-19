@@ -1,0 +1,210 @@
+{
+  "endpoints": {
+    "/games": {
+      "status": "error",
+      "errors": {
+        "plan": "Free plans do not have access to this date, try from 2025-11-18 to 2025-11-20."
+      },
+      "params": {
+        "date": "2023-03-16"
+      }
+    },
+    "/players": {
+      "status": "success",
+      "results": 38,
+      "sample": {
+        "id": 156,
+        "name": "Scott Pendlebury"
+      },
+      "params": {
+        "team": 4,
+        "season": 2023
+      }
+    },
+    "/teams": {
+      "status": "success",
+      "results": 18,
+      "sample": {
+        "id": 1,
+        "name": "Adelaide Crows",
+        "logo": "https://media.api-sports.io/afl/teams/1.png"
+      },
+      "params": null
+    },
+    "/leagues": {
+      "status": "success",
+      "results": 15,
+      "sample": {
+        "id": 1,
+        "name": "AFL Premiership",
+        "logo": "https://media.api-sports.io/afl/leagues/1.png",
+        "season": 2011,
+        "start": "2011-03-24",
+        "end": "2011-10-01",
+        "current": false
+      },
+      "params": null
+    },
+    "/seasons": {
+      "status": "success",
+      "results": 15,
+      "sample": 2011,
+      "params": null
+    },
+    "/players/statistics": {
+      "status": "error",
+      "errors": {
+        "rateLimit": "Too many requests. Your rate limit is 10 requests per minute."
+      },
+      "params": {
+        "player": 156,
+        "season": 2023
+      }
+    },
+    "/statistics": {
+      "status": "error",
+      "errors": {
+        "endpoint": "This endpoint do not exist."
+      },
+      "params": {
+        "player": 156
+      }
+    },
+    "/statistics/players": {
+      "status": "error",
+      "errors": {
+        "endpoint": "This endpoint do not exist."
+      },
+      "params": {
+        "player": 156
+      }
+    },
+    "/games/2524": {
+      "status": "error",
+      "errors": {
+        "endpoint": "This endpoint do not exist."
+      },
+      "params": null
+    },
+    "/games/2524/players": {
+      "status": "error",
+      "errors": {
+        "endpoint": "This endpoint do not exist."
+      },
+      "params": null
+    },
+    "/games/2524/statistics": {
+      "status": "error",
+      "errors": {
+        "endpoint": "This endpoint do not exist."
+      },
+      "params": null
+    },
+    "/games/2524/events": {
+      "status": "error",
+      "errors": {
+        "endpoint": "This endpoint do not exist."
+      },
+      "params": null
+    },
+    "/players/156": {
+      "status": "error",
+      "errors": {
+        "endpoint": "This endpoint do not exist."
+      },
+      "params": null
+    },
+    "/players/156/statistics": {
+      "status": "error",
+      "errors": {
+        "endpoint": "This endpoint do not exist."
+      },
+      "params": null
+    },
+    "/players/156/games": {
+      "status": "error",
+      "errors": {
+        "endpoint": "This endpoint do not exist."
+      },
+      "params": null
+    },
+    "/players/156/injuries": {
+      "status": "error",
+      "errors": {
+        "endpoint": "This endpoint do not exist."
+      },
+      "params": null
+    },
+    "/standings": {
+      "status": "error",
+      "errors": {
+        "rateLimit": "Too many requests. Your rate limit is 10 requests per minute."
+      },
+      "params": {
+        "season": 2021,
+        "league": 1
+      }
+    },
+    "/venues": {
+      "status": "error",
+      "errors": {
+        "endpoint": "This endpoint do not exist."
+      },
+      "params": null
+    },
+    "/rounds": {
+      "status": "error",
+      "errors": {
+        "endpoint": "This endpoint do not exist."
+      },
+      "params": {
+        "season": 2023
+      }
+    },
+    "/fixtures": {
+      "status": "error",
+      "errors": {
+        "endpoint": "This endpoint do not exist."
+      },
+      "params": {
+        "season": 2023
+      }
+    }
+  },
+  "data_structures": {
+    "/games": [
+      "game",
+      "league",
+      "date",
+      "time",
+      "timestamp",
+      "timezone",
+      "round",
+      "week",
+      "venue",
+      "attendance",
+      "status",
+      "teams",
+      "scores"
+    ],
+    "/players": [
+      "id",
+      "name"
+    ],
+    "/teams": [
+      "id",
+      "name",
+      "logo"
+    ],
+    "/leagues": [
+      "id",
+      "name",
+      "logo",
+      "season",
+      "start",
+      "end",
+      "current"
+    ]
+  },
+  "available_fields": {}
+}
