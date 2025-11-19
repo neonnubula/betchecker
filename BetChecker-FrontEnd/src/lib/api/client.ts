@@ -73,6 +73,12 @@ export async function getPlayerOverUnder(
   
   const url = `${API_BASE_URL}/search/over-under?${queryParams.toString()}`;
   
+  // Log the URL in development for debugging
+  if (import.meta.env.DEV) {
+    console.log('API Request URL:', url);
+    console.log('API Base URL:', API_BASE_URL);
+  }
+  
   try {
     const response = await fetch(url, {
       method: 'GET',
@@ -81,7 +87,21 @@ export async function getPlayerOverUnder(
       },
     });
     
-    const data = await response.json();
+    // Check if response is JSON before parsing
+    const contentType = response.headers.get('content-type');
+    let data;
+    
+    if (!contentType || !contentType.includes('application/json')) {
+      const text = await response.text();
+      console.error('Non-JSON response received:', text.substring(0, 200));
+      console.error('API URL attempted:', url);
+      throw new ApiClientError(
+        `Expected JSON but received ${contentType || 'unknown content type'}. Check that VITE_API_BASE_URL is set correctly. Current API URL: ${url}`,
+        response.status
+      );
+    }
+    
+    data = await response.json();
     
     if (!response.ok) {
       const error: ApiError = data;
@@ -98,7 +118,14 @@ export async function getPlayerOverUnder(
       throw error;
     }
     
-    // Handle network errors
+    // Handle network errors and JSON parse errors
+    if (error instanceof SyntaxError && error.message.includes('JSON')) {
+      throw new ApiClientError(
+        `Invalid response from API. Make sure VITE_API_BASE_URL is set to your Railway backend URL (currently: ${API_BASE_URL})`,
+        undefined
+      );
+    }
+    
     throw new ApiClientError(
       error instanceof Error ? error.message : 'Network error occurred',
       undefined,
