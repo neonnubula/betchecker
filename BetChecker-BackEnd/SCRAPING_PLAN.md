@@ -148,25 +148,35 @@ db.insert("""
 
 ## Data Sources to Consider
 
-### Option 1: AFL Official Website (afl.com.au)
+### Option 1: API-Sports.io AFL API ⭐ RECOMMENDED
+- **URL**: https://api-sports.io/documentation/afl/v1
+- **Pros**: 
+  - Structured JSON data (no HTML parsing)
+  - Reliable and maintained
+  - Likely includes player DOB
+  - Official data source
+- **Cons**: 
+  - Requires API key (may have free tier)
+  - Rate limits based on subscription
+  - May not have all historical data
+- **Access**: REST API calls
+- **Guide**: See `API_SPORTS_IO_GUIDE.md`
+- **Test Script**: `scripts/test_api_sports.py`
+
+### Option 2: AFL Official Website (afl.com.au)
 - **Pros**: Official, reliable, comprehensive
 - **Cons**: May have rate limiting, structure may change
 - **Access**: Check for API or scrape HTML
 
-### Option 2: FootyWire (footywire.com)
+### Option 3: FootyWire (footywire.com)
 - **Pros**: Well-structured, historical data, player profiles
 - **Cons**: May have terms of service restrictions
 - **Access**: HTML scraping
 
-### Option 3: AFL Tables (afltables.com)
+### Option 4: AFL Tables (afltables.com)
 - **Pros**: Comprehensive historical data, well-organized
 - **Cons**: HTML scraping required
 - **Access**: HTML scraping
-
-### Option 4: AFL API (if available)
-- **Pros**: Structured data, official
-- **Cons**: May require API key, rate limits
-- **Access**: REST API calls
 
 ## Implementation Plan
 
