@@ -100,3 +100,31 @@ pytest tests/test_search_api.py::test_over_under_returns_two_fields_only -v
 - **Primary View**: `vw_complete_game_stats`
 - See `BetChecker-PlayerDatabase/README.md` for schema details
 
+## Deployment (Railway)
+
+1. **Create a project**
+   - In Railway, select **New Project → Deploy from Repo** and connect the Git repository that contains this backend.
+   - When prompted for a root directory, enter `BetChecker-BackEnd`.
+
+2. **Configure the service**
+   - **Build Command:** `pip install -r requirements.txt`
+   - **Start Command:** `uvicorn app.main:app --host 0.0.0.0 --port $PORT`
+
+3. **Environment variables**
+   - Add `DB_PATH=BetChecker-BackEnd/BetChecker-PlayerDatabase/afl_stats.db`.
+   - Add any future secrets (e.g., API keys) under the **Variables** tab.
+
+4. **Deploy**
+   - Trigger a manual deploy. Railway will install dependencies and launch Uvicorn bound to the provided `$PORT`.
+   - Use the **Logs** panel to confirm the database file is found and the API starts without errors.
+
+5. **Verify**
+   - Visit `https://<railway-domain>/docs` to confirm the FastAPI docs load.
+   - Test the main endpoint: `https://<railway-domain>/search/over-under?player_name=Scott%20Pendlebury&stat=disposals&threshold=23.5`.
+
+### Notes on SQLite in Railway
+
+- The SQLite file bundled in `BetChecker-PlayerDatabase/afl_stats.db` ships with each deploy. For read-only analytics this is sufficient.
+- If you need to persist writes or updates, provision a [Railway Volume](https://docs.railway.app/guides/volumes) and point `DB_PATH` to the mounted path (commonly `/mnt/data/afl_stats.db`).
+- Keep the `CORSMiddleware` origins in `app/main.py` up-to-date with your deployed frontend domain once it is live.
+

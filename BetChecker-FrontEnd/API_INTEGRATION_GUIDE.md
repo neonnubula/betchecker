@@ -157,6 +157,28 @@ Or update `src/lib/api/config.ts` to set your production URL.
 
 The `vite.config.ts` includes a proxy configuration for `/search` that forwards to `http://localhost:8000`. This is optional since the backend has CORS enabled, but can be useful for avoiding CORS issues during development.
 
+## Production Deployment
+
+### Deploying the API to Railway
+
+1. Connect your Git repository to Railway and set the project root to `BetChecker-BackEnd`.
+2. Use `pip install -r requirements.txt` as the build command and `uvicorn app.main:app --host 0.0.0.0 --port $PORT` as the start command.
+3. Add an environment variable `DB_PATH=BetChecker-BackEnd/BetChecker-PlayerDatabase/afl_stats.db`.
+4. Once deployed, note the generated domain (for example, `https://betchecker-backend.up.railway.app`).
+
+### Deploying the Frontend to Vercel
+
+1. In Vercel, import the same Git repository and set the project root to `BetChecker-FrontEnd`.
+2. Use the default Vite settings: build command `npm run build` and output directory `dist`.
+3. Add an environment variable `VITE_API_BASE_URL` with the Railway domain from the backend deployment.
+4. Deploy and verify that network requests in the browser target the Railway URL (visible in the DevTools Network tab).
+
+### Post-Deployment Checklist
+
+- Confirm the backend `/docs` endpoint loads over the Railway domain.
+- Open the Vercel deployment and trigger a search; results should match the backend responses.
+- Update `src/lib/api/config.ts` or project environment variables if the backend domain changes.
+
 ## Error Handling
 
 The API client throws `ApiClientError` instances with:
