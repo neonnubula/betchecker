@@ -20,6 +20,15 @@ DB_PATH = os.path.abspath(DB_PATH)
 
 app = FastAPI(title="AFL Player Over/Under Search API")
 
+@app.get("/")
+def root():
+    """Root endpoint - redirects to API docs"""
+    return {
+        "message": "AFL Player Over/Under Search API",
+        "docs": "/docs",
+        "endpoint": "/search/over-under"
+    }
+
 @app.on_event("startup")
 async def startup_event():
     """Log database path on startup for debugging"""
